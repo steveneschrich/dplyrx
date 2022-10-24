@@ -1,6 +1,6 @@
 Package: dplyrx
 Title: Extended Dplyr-type Functionality
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: 
     person("Steven", "Eschrich", , "Steven.Eschrich@moffitt.org", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
