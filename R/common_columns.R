@@ -24,7 +24,7 @@ find_common_colnames <- function(tbls=NULL, ignore = NULL) {
   # If a data frame (not a list), wrap it so the function works.
   if ( is.data.frame(tbls) )  tbls <- list(tbls)
 
-  if (! all(purrr::map_lgl(tbls, is.data.frame))) {
+  if (! all(purrr::map_lgl(tbls, ~is.data.frame(.x)|is.null(.x)))) {
     stop(
       "One of the arguments is not a data frame.\n",
       "Check if subsetting a table that drop=F is included.")
@@ -120,7 +120,7 @@ detect_duplicate_colnames <- function(.x) {
 #' }
 rename_common_columns <- function(tbls, suffix=NULL, ignore=NULL) {
 
-  stopifnot("Table list does not contain data frames!"=all(purrr::map_lgl(tbls, is.data.frame)))
+  stopifnot("Table list does not contain data frames!"=all(purrr::map_lgl(tbls, ~is.data.frame(.x)|is.null(.x))))
   if ( is.null(suffix) )
     suffix <- paste0(".t",1:length(tbls))
 

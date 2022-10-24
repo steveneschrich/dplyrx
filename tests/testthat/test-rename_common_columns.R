@@ -1,13 +1,17 @@
 test_that("error conditions", {
   expect_error(rename_common_columns(iris))
   expect_error(rename_common_columns(iris, suffix=c()))
+
 })
 
 test_that("Degenerate condition", {
   expect_equal(rename_common_columns(list(iris), suffix=c("a")), list(iris))
+  expect_equal(rename_common_columns(list(iris, NULL), suffix=c("a","b")), list(iris, NULL))
   expect_equal(rename_common_columns(list(iris, mtcars), suffix=c(".iris",".mtcars")),
                list(iris,mtcars))
+
 })
+
 
 iris_rename <- list(
   setNames(iris, paste0(colnames(iris),".x")),
