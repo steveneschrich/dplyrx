@@ -27,10 +27,10 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
   if ( is.null(suffix) )
     suffix <- paste0(".t",1:length(x))
 
-  # Filter out any NULL values in the list
-  null_tables <- purrr::map_lgl(x,is.null)
-  if (any(null_tables)) {
-    suffix <- suffix[!null_tables]
+  # Filter out any empty tables in the list
+  empty_tables <- purrr::map_lgl(x,~is.null(.x) | nrow(.x)==0)
+  if (any(empty_tables)) {
+    suffix <- suffix[!empty_tables]
     x <- purrr::compact(x)
   }
 
