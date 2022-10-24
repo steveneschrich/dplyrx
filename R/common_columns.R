@@ -24,7 +24,7 @@ find_common_colnames <- function(tbls=NULL, ignore = NULL) {
   # If a data frame (not a list), wrap it so the function works.
   if ( is.data.frame(tbls) )  tbls <- list(tbls)
 
-  if (! all(purrr::map_lgl(tbls, ~is.data.frame(.x)|is.null(.x)))) {
+  if (! all(purrr::map_lgl(tbls, ~is.data.frame(.x)||is.null(.x)))) {
     stop(
       "One of the arguments is not a data frame.\n",
       "Check if subsetting a table that drop=F is included.")

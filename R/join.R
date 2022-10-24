@@ -28,7 +28,7 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
     suffix <- paste0(".t",1:length(x))
 
   # Filter out any empty tables in the list
-  empty_tables <- purrr::map_lgl(x,~is.null(.x) | nrow(.x)==0)
+  empty_tables <- purrr::map_lgl(x,~is.null(.x) || nrow(.x)==0)
   if (any(empty_tables)) {
     suffix <- suffix[!empty_tables]
     x <- purrr::compact(x)
@@ -47,7 +47,7 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
   x <- rename_common_columns(x, suffix = suffix, ignore = by)
 
   # Join on all columns
-  newx <- purrr::reduce(x, ~join_fun(.x, .y, by = by, !!!args))
+  newx <- purrr::reduce(x,  ~join_fun(.x, .y, by = by, !!!args))
 
   # Cleanup collision columns where possible
   newx <- coalesce_collisions(newx, suffix)
