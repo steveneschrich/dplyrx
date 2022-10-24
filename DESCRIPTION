@@ -1,10 +1,13 @@
 Package: dplyrx
-Title: What the Package Does (One Line, Title Case)
+Title: Extended Dplyr-type Functionality
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Steven", "Eschrich", , "Steven.Eschrich@moffitt.org", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: There are a few extra things that are dplyr-like that I have found useful. One 
+  is the ability to coalesce columns after joining but warning if there are mismatches (and not
+  coalescing). Another is to join across a list of tables, cleaning up collisions (same columns)
+  afterwards. This package implements that functionality.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
