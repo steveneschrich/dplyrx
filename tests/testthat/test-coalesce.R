@@ -14,14 +14,15 @@ test_that("coalesceing data frames", {
     ),
     data.frame(new=c("A","B","C"))
   )
-  expect_error(
+  expect_equal(
     suppressWarnings(
       coalesce_data_frame(
         data.frame(F1=c("A","B","C"), F2=c("B",NA,"C")),
         new = c("F1","F2"),
         pick_first = FALSE
       )
-    )
+    ),
+    data.frame(F2=c("B",NA,"C"), new=c("A","B","C"))
   )
 })
 
@@ -35,14 +36,28 @@ test_that("coalesceing data frames when unequal", {
     )}),
     data.frame(new=c("A","B","B1","C"))
   )
-  expect_error(
+  expect_equal(
      suppressWarnings(
        coalesce_data_frame(
          data.frame(F1=c("A","B","B1","B2","C"), F2=c("A",NA,"B1","B12","C")),
          new = c("F1","F2"),
          pick_first=FALSE
        )
-     )
+     ),
+     data.frame(F2=c("A",NA,"B1","B12","C"),new=c("A","B","B1","B2","C"))
   )
+  expect_equal(
+    suppressWarnings(
+      coalesce_data_frame(
+        data.frame(F1=c("A","B","B1","B2","C"), F2=c("A",NA,"B1","B12","C")),
+        new = c("F2","F1"),
+        pick_first=FALSE
+      )
+    ),
+    data.frame(F1=c("A","B","B1","B2","C"), new=c("A",NA,"B1","B12","C"))
+  )
+
+
+
 })
 

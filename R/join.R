@@ -36,17 +36,14 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
     inner = dplyr::inner_join
   )
 
-  # Record collisions for coalescing
-  collisions <- find_collisions(!!!x, ignore = by)
-
   # Rename colnames if collisions could occur.
-  x <- rename_collisions(x, suffix = suffix, ignore = by)
+  x <- rename_common_columns(x, suffix = suffix, ignore = by)
 
   # Join on all columns
   newx <- purrr::reduce(x, ~join_fun(.x, .y, by = by, !!!args))
 
   # Cleanup collision columns where possible
-  newx <- coalesce_collisions(newx, collisions, suffix)
+  newx <- coalesce_collisions(newx, suffix)
 
   newx
 
@@ -54,29 +51,74 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
 
 #' @describeIn list_join Include all rows from cumulatively joined table
 #' @export
-left_joinl <- function(...) {
+left_mjoin <- function(...) {
   list_join(..., which="left")
 }
-
-# This is to do the coalesce afterwards, I tink,
-left_join <- function(x, y, by=NULL, ...) {
-
-}
-
 #' @describeIn list_join Include all rows from each additional table
 #' @export
-right_joinl <- function(...) {
+right_mjoin <- function(...) {
   list_join(..., which="right")
 }
 
 #' @describeIn list_join Include rows in common between all tables
 #' @export
-inner_joinl <- function(...) {
+inner_mjoin <- function(...) {
   list_join(..., which="inner")
 }
 
 #' @describeIn list_join Include rows in any table
 #' @export
-full_joinl <- function(...) {
+full_mjoin <- function(...) {
   list_join(..., which="full")
 }
+
+
+#' Left join with coalesce of column collisions
+#'
+#' When joining two tables, collisions can occur and the column names will
+#' be appended with a suffix. This function then tries to re-combine these
+#' columns based on equality or NA.
+#'
+#' @param x The first table
+#' @param y The second table
+#' @param by A join variable (see [dplyr::left_join()])
+#' @param suffix A two-element list of suffixes to append if colnames collide.
+#' @param ... Any other parameters (see [dplyr::left_join()])
+#'
+#' @return A data frame representing the join of the two parameters, followed by an attempt
+#'  to coalesce columns that collided (same column name). If they cannot be coalesced, they
+#'  are left as is with a warning printed.
+#' @export
+#'
+#' @examples
+left_join <- function(x, y, by=NULL, suffix=c(".x",".y"), ...) {
+
+  newx <- dplyr::left_join(x = x,y = y,by = by,suffix = suffix, ...)
+
+  coalesce_collisions(newx, suffix)
+}
+#' @describeIn left_join Right join
+#' @export
+right_join <- function(x, y, by=NULL, suffix=c(".x",".y"), ...) {
+
+  newx <- dplyr::right_join(x = x,y = y,by = by,suffix = suffix, ...)
+
+  coalesce_collisions(newx, suffix)
+}
+#' @describeIn left_join Inner join
+#' @export
+inner_join <- function(x, y, by=NULL, suffix=c(".x",".y"), ...) {
+
+  newx <- dplyr::inner_join(x = x,y = y,by = by,suffix = suffix, ...)
+
+  coalesce_collisions(newx, suffix)
+}
+#' @describeIn left_join Full join
+#' @export
+full_join <- function(x, y, by=NULL, suffix=c(".x",".y"), ...) {
+
+  newx <- dplyr::full_join(x = x,y = y,by = by,suffix = suffix, ...)
+
+  coalesce_collisions(newx, suffix)
+}
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/coalesce.R
 \name{coalesce_columns}
 \alias{coalesce_columns}
-\title{Coalesce columns into a single new column}
+\title{Coalesce columns of data frame into a single new column}
 \usage{
 coalesce_columns(
   x,
@@ -15,10 +15,27 @@ coalesce_columns(
 )
 }
 \arguments{
-\item{var_list}{}
+\item{x}{A data frame to operate on}
+
+\item{new_var}{A new variable name for the coalesced fields (can reuse existing variable name)}
+
+\item{var_list}{A vector of variable names to try and coalesce}
+
+\item{remove}{Logical (T). Should the old variables be removed from the data frame?}
+
+\item{drop}{Logical (F). Should mismatches in columns force dropping the associated rows?}
+
+\item{warn_only}{(T). Should mismatches prompt a warning, but not an error?}
+
+\item{pick_first}{(T). Should default coalesce behavior be used (pick the first non-NA)? Note that for
+\code{warn_only} to work, the \code{pick_first} option must be true.}
+}
+\value{
+A data frame with the specified columns coalesced into a single, new column. Note that flags
+will change this default result slightly.
 }
 \description{
-Coalesce columns into a single new column
+Coalesce columns of data frame into a single new column
 }
 \note{
 The default operation of this function should mirror \code{\link[dplyr:coalesce]{dplyr::coalesce()}}.

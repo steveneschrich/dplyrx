@@ -7,9 +7,9 @@
 find_common_colnames(tbls = NULL, ignore = NULL)
 }
 \arguments{
-\item{ignore}{A list of column names to ignore when finding common names}
+\item{tbls}{A list of data.frames}
 
-\item{...}{A list of data.frames}
+\item{ignore}{A list of column names to ignore when finding common names}
 }
 \value{
 A character vector of column names that are in common between

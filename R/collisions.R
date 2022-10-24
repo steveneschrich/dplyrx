@@ -41,15 +41,15 @@ identify_collisions<-function(x, suffix=c(".x",".y")) {
     # vector of suffixes.
     dplyr::rowwise() |>
     # Filter to only those with a suffix
-    dplyr::filter(any(endsWith(value, suffix))) |>
+    dplyr::filter(any(endsWith(.data$value, suffix))) |>
     # Record the suffix used
-    dplyr::mutate(suffix = suffix[endsWith(value, suffix)]) |>
+    dplyr::mutate(suffix = suffix[endsWith(.data$value, suffix)]) |>
     # Trim off the suffix
-    dplyr::mutate(base = stringr::str_sub(value, 1, stringr::str_length(value) - stringr::str_length(suffix))) |>
+    dplyr::mutate(base = stringr::str_sub(.data$value, 1, stringr::str_length(.data$value) - stringr::str_length(suffix))) |>
     # Convert into var  = c(collide1, collide2)
-    dplyr::select(base, value) |>
-    dplyr::group_by(base) |>
-    tidyr::chop(value)|>
+    dplyr::select(.data$base, .data$value) |>
+    dplyr::group_by(.data$base) |>
+    tidyr::chop(.data$value)|>
     tibble::deframe() |>
     as.list()
 
@@ -87,7 +87,7 @@ coalesce_collisions <- function(x,  suffix=c(".x",".y")) {
 
   # Coalesce the variables (where possible).  Note this package has a coalesce, not
   # the default dplyr coalescce.
-  x <- coalesce(x, !!!collisions, warn_only = TRUE)
+  x <- coalesce_data_frame(x, !!!collisions, warn_only = TRUE, pick_first=FALSE)
 
   x
 }

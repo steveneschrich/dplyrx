@@ -2,21 +2,21 @@
 % Please edit documentation in R/join.R
 \name{list_join}
 \alias{list_join}
-\alias{left_joinl}
-\alias{right_joinl}
-\alias{inner_joinl}
-\alias{full_joinl}
+\alias{left_mjoin}
+\alias{right_mjoin}
+\alias{inner_mjoin}
+\alias{full_mjoin}
 \title{Join a list of tables together on a common key}
 \usage{
 list_join(x, by = NULL, which = "full", suffix = NULL, ...)
 
-left_joinl(...)
+left_mjoin(...)
 
-right_joinl(...)
+right_mjoin(...)
 
-inner_joinl(...)
+inner_mjoin(...)
 
-full_joinl(...)
+full_mjoin(...)
 }
 \arguments{
 \item{x}{A list of data frames}
@@ -40,13 +40,13 @@ all list elements of \code{x}.
 }
 \section{Functions}{
 \itemize{
-\item \code{left_joinl()}: Include all rows from cumulatively joined table
+\item \code{left_mjoin()}: Include all rows from cumulatively joined table
 
-\item \code{right_joinl()}: Include all rows from each additional table
+\item \code{right_mjoin()}: Include all rows from each additional table
 
-\item \code{inner_joinl()}: Include rows in common between all tables
+\item \code{inner_mjoin()}: Include rows in common between all tables
 
-\item \code{full_joinl()}: Include rows in any table
+\item \code{full_mjoin()}: Include rows in any table
 
 }}
 \examples{

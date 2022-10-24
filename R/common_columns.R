@@ -3,12 +3,14 @@
 #' @description Given data.frames (as parameters), check what column names
 #' are in common among them.
 #'
-#' @param ... A list of data.frames
+#' @param tbls A list of data.frames
 #' @param ignore A list of column names to ignore when finding common names
 #'
 #' @return A character vector of column names that are in common between
 #'   data frame.
 #' @export
+#'
+#' @importFrom rlang .data
 #'
 #' @examples
 #' \dontrun{
@@ -32,11 +34,11 @@ find_common_colnames <- function(tbls=NULL, ignore = NULL) {
   # to a data frame allows us to do some nice arranging of information.
   common_fields <- purrr::map(tbls, colnames) |>
     tibble::enframe(name = "data_frame", value="colname") |>
-    tidyr::unchop(colname) |>
-    dplyr::group_by(colname) |>
+    tidyr::unchop(.data$colname) |>
+    dplyr::group_by(.data$colname) |>
     dplyr::filter(dplyr::n()>1) |>
-    dplyr::filter(!colname %in% ignore) |>
-    tidyr::chop(data_frame) |>
+    dplyr::filter(!.data$colname %in% ignore) |>
+    tidyr::chop(.data$data_frame) |>
     tibble::deframe() |>
     as.list()
 
@@ -90,7 +92,7 @@ common_colnames <- function(tbls = NULL, ignore=NULL) {
 #' }
 detect_duplicate_colnames <- function(.x) {
   common <- find_common_colnames(list(.x))
-  setNames(colnames(.x) %in% names(common), colnames(.x))
+  stats::setNames(colnames(.x) %in% names(common), colnames(.x))
 }
 
 #

@@ -55,6 +55,8 @@ vec_coalesce <- function(a, b, pick_first=FALSE) {
 #' a warning is printed.
 #' @param pick_first Logical. Should the coalesce approach (select the first non-NA) be used? The
 #' function will warn if there are unequal values, but use the first non-NA.
+#' @param warn_only Logical. Should a mismatch trigger a warning (TRUE) or stop (FALSE).
+#'
 #' @return A data frame with the old variables coalesced into new variables and old variables removed (assuming
 #' `remove=TRUE`).
 #' @export
@@ -63,11 +65,13 @@ vec_coalesce <- function(a, b, pick_first=FALSE) {
 #' @importFrom rlang .data
 #'
 #' @examples
+#' \dontrun{
 #' coalesce(data.frame(a=c(1,2,3), b=c(NA,2,3)), new=c("a","b"))
 #' #   new
 #' # 1   1
 #' # 2   2
 #' # 3   3
+#' }
 coalesce_data_frame <- function(x, ..., remove = TRUE, drop = FALSE, pick_first=TRUE, warn_only=TRUE) {
 
    # The input can be a series of newname = c(oldvalue1, oldvalue2).
@@ -87,14 +91,20 @@ coalesce_data_frame <- function(x, ..., remove = TRUE, drop = FALSE, pick_first=
 }
 
 
-#' Coalesce columns into a single new column
+#' Coalesce columns of data frame into a single new column
 #'
 #' @note The default operation of this function should mirror [dplyr::coalesce()].
-#' @param x
-#' @param new_var
-#' @param var_list
+#' @param x A data frame to operate on
+#' @param new_var A new variable name for the coalesced fields (can reuse existing variable name)
+#' @param var_list A vector of variable names to try and coalesce
+#' @param remove Logical (T). Should the old variables be removed from the data frame?
+#' @param drop Logical (F). Should mismatches in columns force dropping the associated rows?
+#' @param warn_only (T). Should mismatches prompt a warning, but not an error?
+#' @param pick_first (T). Should default coalesce behavior be used (pick the first non-NA)? Note that for
+#'   `warn_only` to work, the `pick_first` option must be true.
 #'
-#' @return
+#' @return A data frame with the specified columns coalesced into a single, new column. Note that flags
+#'   will change this default result slightly.
 #' @export
 #'
 #' @examples
@@ -136,10 +146,12 @@ coalesce_columns <- function(x, new_var, var_list, remove = TRUE, drop=FALSE, wa
     # Now we know if the two vectors are equivalent. If they are, we can just use coalesce and
     # be done. If they are not, then unless specifically flagged to skip mismatches we should
     # not get to this point.
-    if ( !all(equivalent) && !pick_first ) {
-      stop("Error: not all elements are equivalent but pick_first was not chosen. This condition",
-                        "should not have occurred. Please consult the code and/or developer for details.")
-    }
+    #
+    # NB: This is actually ok, it just doesn't get coalesced. So we don't need an error here, I think.
+    # if ( !all(equivalent) && !pick_first ) {
+    #   stop("Error: not all elements are equivalent but pick_first was not chosen. This condition",
+    #                     "should not have occurred. Please consult the code and/or developer for details.")
+    # }
 
     if ( all(equivalent) || pick_first ) {
 

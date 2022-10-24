@@ -4,14 +4,17 @@
 \alias{coalesce_collisions}
 \title{Coalesce columns that collided if possible}
 \usage{
-coalesce_collisions(x, collisions = c(), suffix = c(".x", ".y"))
+coalesce_collisions(x, suffix = c(".x", ".y"))
 }
 \arguments{
 \item{x}{A data frame with collisions}
 
-\item{collisions}{A list of variables that collide}
-
-\item{suffix}{}
+\item{suffix}{Suffix values expected for collisions (not all suffixes need to be
+in the collisions).}
+}
+\value{
+A data frame with all possible collision columns coalesced. Remaining
+columns that collided are kept as is.
 }
 \description{
 When joining two data frames, columns of the same name will
