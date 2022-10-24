@@ -81,7 +81,7 @@ identify_collisions<-function(x, suffix=c(".x",".y")) {
 #' @examples
 coalesce_collisions <- function(x,  suffix=c(".x",".y")) {
 
-  stopifnot(length(x) == length(suffix))
+  stopifnot("x is not a data frame!"=is.data.frame(x))
 
   collisions<-identify_collisions(x, suffix)
 
