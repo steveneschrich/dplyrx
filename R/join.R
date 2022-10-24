@@ -22,13 +22,17 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
 
   args <- rlang::list2(...)
 
-  # Filter out any NULL values in the list
-  x <- purrr::compact(x)
-
   # If no suffixes provided, we need our own version of .x, .y. But
   # for an arbitrary number of entries.
   if ( is.null(suffix) )
     suffix <- paste0(".t",1:length(x))
+
+  # Filter out any NULL values in the list
+  null_tables <- purrr::map_lgl(x,is.null)
+  if (any(null_tables)) {
+    suffix <- suffix[!null_tables]
+    x <- purrr::compact(x)
+  }
 
   # Setup which join to use
   join_fun <- switch(
