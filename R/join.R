@@ -22,6 +22,9 @@ list_join <- function(x, by = NULL, which="full", suffix=NULL, ...) {
 
   args <- rlang::list2(...)
 
+  # Filter out any NULL values in the list
+  x <- purrr::compact(x)
+
   # If no suffixes provided, we need our own version of .x, .y. But
   # for an arbitrary number of entries.
   if ( is.null(suffix) )
