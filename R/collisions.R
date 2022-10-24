@@ -47,7 +47,13 @@ identify_collisions<-function(x, suffix=c(".x",".y")) {
     # Trim off the suffix
     dplyr::mutate(base = stringr::str_sub(.data$value, 1, stringr::str_length(.data$value) - stringr::str_length(suffix))) |>
     # Convert into var  = c(collide1, collide2)
-    dplyr::select(.data$base, .data$value) |>
+    dplyr::select(.data$base, .data$value)
+
+  # Add in original fields, if present, as collisions
+  original_fields <- intersect(colnames(x), collisions$base)
+  collisions <- rbind(collisions, c(original_fields, original_fields))
+
+  collisions <- collisions |>
     dplyr::group_by(.data$base) |>
     tidyr::chop(.data$value)|>
     tibble::deframe() |>
